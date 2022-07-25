@@ -1,0 +1,51 @@
+- name: "Register repo path"
+  set_fact:
+    repo_dir: "/repository"
+  tags: build
+
+- name: "Create subfolders {{ repo_dir }}"
+  become: yes
+  file:
+    path: "{{ repo_dir }}/dists/stable/main/binary-amd64"
+    state: directory
+    mode: '0777'
+  tags: build
+
+- name: "Register package name"
+  set_fact:
+    package_name: "peervpn_{{ package_version }}_amd64.deb"
+  tags: publish
+
+- name: "Copy builded package to {{ repo_dir }}"
+  copy:
+    src: "/tmp/peervpn_repo/build/{{ package_name }}"
+    dest: "{{ repo_dir }}/{{ package_name }}"
+    #If build_host != repo_host please set to "no"
+    remote_src: yes
+  tags: publish
+
+- name: "Scan for repo packages"
+  shell:
+    cmd: "dpkg-scanpackages --arch amd64 . | gzip -9c > {{ repo_dir }}/dists/stable/main/binary-amd64/Packages.gz"
+    chdir: "{{ repo_dir }}"
+  register: scan_stdout
+  failed_when: scan_stdout.rc != 0
+  tags:
+  - publish
+
+- name: "Show reload output"
+  debug:
+    msg: "{{  scan_stdout.stdout_lines }}"
+  tags:
+  - publish
+
+- name: "Run nginx web server"
+  become: yes
+  docker_container:
+    name: "nginx"
+    image: "da1ight/nginx-folder-listing"
+    volumes: "/repository:/mnt/data"
+    ports: "8080:80"
+  failed_when: scan_stdout.rc != 0
+  tags:
+    - publish

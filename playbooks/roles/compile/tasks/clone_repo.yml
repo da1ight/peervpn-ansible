@@ -1,0 +1,4 @@
+- name: "Git checkout peervpn"
+  git:
+    repo: "{{ peervpn_repo }}" 
+    dest: /tmp/peervpn_repo

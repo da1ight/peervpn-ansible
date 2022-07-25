@@ -1,0 +1,8 @@
+- name: "Install dependencies"
+  include: "install_deps.yml"
+
+- name: "Chekout repo"
+  include: "clone_repo.yml"
+
+- name: "Compile peervpn"
+  include: "comlile.yml"

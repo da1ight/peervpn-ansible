@@ -1,0 +1,26 @@
+- name: "Process peervpn"
+  hosts: build_host
+  gather_facts: no
+  tasks:
+    - name: "Include compile role"
+      include_role:
+        name: compile
+      tags: compile
+
+- name: "Build peervpn package"
+  hosts: build_host
+  gather_facts: no
+  tasks:
+    - name: "Include build role"
+      include_role:
+        name: build
+      tags: build
+
+- name: "Publish peervpn package"
+  hosts: repo_host
+  gather_facts: no
+  tasks:
+    - name: "Include publish role"
+      include_role:
+        name: publish
+      tags: publish

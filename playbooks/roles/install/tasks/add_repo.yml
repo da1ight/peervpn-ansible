@@ -1,0 +1,17 @@
+- name: "Add peervpn repo to the apt repo list"
+  copy:
+    dest: "/etc/apt/sources.list.d/peervpn.list"
+    content: "deb [trusted=yes arch=amd64] http://{{ repo_host }}:8080 stable main"
+  tags: install
+
+- name: "Update repositories cache and install peervpn package"
+  apt:
+    name: peervpn
+    update_cache: yes
+  tags: install
+
+- name: "Set correct rights if run under sudo"
+  file:
+    path: /usr/local/bin/peervpn
+    mode: '755'
+  tags: install

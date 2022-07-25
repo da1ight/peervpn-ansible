@@ -1,0 +1,6 @@
+- name: "Install dependencies for compiling peervpn"
+  become: yes
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: present
+  with_items: [ 'git', 'gcc', 'make', 'libssl1.0-dev', 'libcrypto++-dev', 'zlib1g-dev', 'uml-utilities', 'dpkg-dev', 'docker.io' ]

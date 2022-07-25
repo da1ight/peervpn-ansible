@@ -1,0 +1,8 @@
+- name: "Run make for peervpn" 
+  shell:
+    cmd: make
+    chdir: /tmp/peervpn_repo 
+  register: make_stdout
+  failed_when: make_stdout.rc != 0
+  tags:
+  - compile

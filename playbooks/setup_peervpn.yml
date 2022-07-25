@@ -1,0 +1,9 @@
+- name: "Install peervpn"
+  hosts: build_host
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: "Install peervpn"
+      include_role:
+        name: install
+      tags: install

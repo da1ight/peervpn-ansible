@@ -1,0 +1,7 @@
+---
+build_host: "1.1.1.1"
+build_user: "user"
+repo_host: "1.1.1.1"
+repo_user: "user"
+repo_dir: "/repo/path/on/repo_host"
+working_dir: "/current/working/directory"
